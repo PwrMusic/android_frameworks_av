@@ -765,6 +765,12 @@ bool CameraClient::lockIfMessageWanted(int32_t msgType) {
             LOG1("lockIfMessageWanted(%d): enter sleep", msgType);
         }
         usleep(CHECK_MESSAGE_INTERVAL * 1000);
+        #ifdef USE_MHB_ION
+        if (sleepCount > 10) {
+            ALOGW("lockIfMessageWanted(%d): time out", msgType);
+            return false;
+        }
+        #endif
     }
     ALOGW("lockIfMessageWanted(%d): dropped unwanted message", msgType);
     return false;
